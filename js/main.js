@@ -1,20 +1,14 @@
 (function(){
 
-window.App = {
-    Models: {},
-    Collections: {},
-    Views: {},
-    Router: {}
-};
 
-App.Router = Backbone.Router.extend({
+AppRouter = Backbone.Router.extend({
     routes: {
         "users"             : "users",
         "users/:id"         : "userDetails"
     },
 
     initialize: function () {
-        this.userDetails();
+    	$("#details").html(new UserView({model: new User()}).el);
     },
 
     users: function() {
@@ -24,15 +18,19 @@ App.Router = Backbone.Router.extend({
         }});
     },
     userDetails: function (id) {
-        var user = new User({id: id});
-        user.fetch({success: function(){
-            $("#details").html(new UserView({model: user}).el);
-        }});
+        var user = new User({id: id, name:null});
+        user.fetch({success: function(u2){
+        	console.log("Name:" + u2.get("name"))
+            $("#details").html(new UserView({model: u2}).el);
+        },error: function(err){
+        	console.log(err);
+        }
+        });
     }
 });
 
 utils.loadTemplate(["UserView", "UserListItemView"], function() {
-    app = new App.Router();
+    app = new AppRouter();
     Backbone.history.start();
 });
 

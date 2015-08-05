@@ -35,8 +35,8 @@ Backbone.sync = function (method, model, options) {
 
     switch (method) {
         case "read":
-            //resp = model.id ? store.find(model) : store.findAll();
-            resp = store.findAll();
+            resp = model.id ? store.find(model) : store.findAll();
+            //resp = store.findAll();
             break;
         case "create":
             resp = store.create(model);
@@ -48,10 +48,13 @@ Backbone.sync = function (method, model, options) {
             resp = store.destroy(model);
             break;
     }
-
+    
+    //console.log("Resp: " + JSON.stringify(resp));
     if (resp) {
         options.success(resp);
+        console.log("NameStore:" + resp["name"])
     } else {
+    	console.log("Record not found");
         options.error("Record not found");
     }
 };
