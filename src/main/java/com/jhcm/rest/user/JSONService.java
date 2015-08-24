@@ -28,6 +28,12 @@ public class JSONService {
 		return users.values();
 	}
 
+	@GET
+	@Path("{id}")
+	public User get(@PathParam("id") int id) {
+		return users.get(id);
+	}
+
 	@POST
 	public Response create(User user) {
 		user.setId(++id_seq);
