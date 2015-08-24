@@ -19,9 +19,11 @@ AppRouter = Backbone.Router.extend({
     },
     userDetails: function (id) {
         var user = new User({id: id, name:null});
-        user.fetch({success: function(u2){
-        	console.log("Name:" + u2.get("name"))
-            $("#details").html(new UserView({model: u2}).el);
+        var view = new UserView({model: user})
+        user.fetch({success: function(){
+        	console.log("Name:" + user.get("name"))
+        	view.render();
+            $("#details").html(view.el);
         },error: function(err){
         	console.log(err);
         }
