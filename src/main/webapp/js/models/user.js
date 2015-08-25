@@ -1,16 +1,20 @@
-window.User = Backbone.Model.extend({
-    urlRoot:"api/users",
+var app = app || {};
 
-    initialize:function () {
-
-    },
-    defaults: {
-        id: null,
-        name: ""
-    }
+app.User = Backbone.Model.extend({
+	urlRoot : "api/users",
+	initialize : function() {
+	},
+	defaults : {
+		id : null,
+		name : ""
+	}
 });
 
-window.UserCollection = Backbone.Collection.extend({
-    model: User,
-    url:"api/users"
+app.UserCollection = Backbone.Collection.extend({
+	model : app.User,
+	url : "api/users"
 });
+
+userList = new app.UserCollection;
+
+templates = {};
