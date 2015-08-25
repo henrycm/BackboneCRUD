@@ -19,6 +19,7 @@ window.UserView = Backbone.View.extend({
         });
         this.model.save();
         this.reset();
+        Backbone.history.navigate("users", true);
     },
     reset: function(){
         this.model = new User();
