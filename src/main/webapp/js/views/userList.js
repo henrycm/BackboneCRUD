@@ -10,9 +10,9 @@ window.UserListView = Backbone.View.extend({
         var startPos = 0;
         var endPos = len;
 
-        $(this.el).html('<ul class="thumbnails"></ul>');
+        $(this.el).html('<table class="table table-bordered"><tr><td>Id</td><td>Name</td></tr></table>');
         for (var i = startPos; i < endPos; i++) {
-            $('.thumbnails', this.el).append(new UserListItemView({model: users[i]}).render().el);
+            $('.table', this.el).append(new UserListItemView({model: users[i]}).render().el);
         }
 
         return this;
@@ -21,12 +21,9 @@ window.UserListView = Backbone.View.extend({
 
 window.UserListItemView = Backbone.View.extend({
 
-    tagName: "li",
-    className: "span3",
+    tagName: "tr",
 
     initialize: function () {
-        //this.model.bind("change", this.render, this);
-        //this.model.bind("destroy", this.close, this);
     },
 
     render: function () {

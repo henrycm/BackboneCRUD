@@ -9,7 +9,8 @@ window.UserView = Backbone.View.extend({
         return this;
     },
     events: {        
-        "click .save"   : "save"
+        "click .save"   : "save",
+        "click .delete"   : "del"
     },
 
     save: function (event) {
@@ -20,6 +21,15 @@ window.UserView = Backbone.View.extend({
         this.model.save();
         this.reset();
         Backbone.history.navigate("users", true);
+    },
+    del: function (event) {
+    	 this.model.destroy({
+             success: function () {
+                 alert('User deleted successfully');
+                 Backbone.history.navigate("users", true);
+             }
+         });                
+        return false;
     },
     reset: function(){
         this.model = new User();
