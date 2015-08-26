@@ -5,11 +5,14 @@ app.UserView = Backbone.View.extend({
 		this.listenTo(userList, 'add', this.addOne);
 		this.listenTo(userList, 'reset', this.addAll);
 		this.listenTo(userList, 'all', this.render);
+		this.listenTo(this.model, 'change', this.render);
 		userList.fetch();
 		this.render();
 	},
 	events : {
 		"click .save" : "createUser",
+		"click .delete" : "deleteUser",
+		"click .load" : "loadUser",
 	},
 	render : function() {
 		this.template = _.template(templates["UserView"]);
@@ -25,18 +28,32 @@ app.UserView = Backbone.View.extend({
 		userList.each(this.addOne, this);
 	},
 	createUser : function() {
-		userList.create(new app.User({
+		var u = new app.User({
 			'id' : ($('#id').val() == "") ? null : $('#id').val(),
 			'name' : $('#name').val()
-		}));
+		});
+		var u2 = userList.create(u);		
+		userList.fetch();	
+		$(".controls input").val("");
 	},
 	addOne : function(user) {
 		var view = new app.UserListItemView({
 			model : user
 		});
 		$('#user_list').append(view.render().el);
-		user.save;
 	},
+	deleteUser : function(e) {
+		e.preventDefault();
+		var id = $(e.currentTarget).attr("data-id");
+		var u = userList.get(id);
+		u.destroy();
+		console.log("User deteleted:" + id);
+	},
+	loadUser : function(e) {
+		var id = $(e.currentTarget).attr("data-id");
+		this.model = userList.get(id);
+		this.render();
+	}
 });
 
 app.UserListItemView = Backbone.View.extend({
