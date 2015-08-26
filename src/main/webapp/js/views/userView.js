@@ -1,40 +1,18 @@
 var app = app || {};
 
 app.UserView = Backbone.View.extend({
-	el: $("#app"),
+	el : $("#form"),
 	initialize : function() {
-		this.listenTo(userList, 'add', this.addOne);
-		this.listenTo(userList, 'reset', this.addAll);
-		this.listenTo(userList, 'all', this.render);
 		this.listenTo(this.model, 'change', this.render);
-		userList.fetch();
 		this.render();
 	},
 	events : {
-		"change" : "change",
-		"click .save" : "createUser",
-		"click .delete" : "deleteUser",
-		"click .load" : "loadUser",
+		"click .save" : "createUser"
 	},
 	render : function() {
 		this.template = _.template(templates["UserView"]);
 		this.$el.html(this.template(this.model.toJSON()));
-		this.addAll();		
 		return this;
-	},
-	change : function(event) {		
-        var target = event.target;
-        var change = {};
-        change[target.name] = target.value;
-        console.log("Change:" + target.value);
-        //this.model.set(change);
-	},
-	destroy : function() {
-		this.model.destroy();
-	},
-	addAll : function() {
-		this.$('#user_list').html("");
-		userList.each(this.addOne, this);
 	},
 	createUser : function() {
 		var u = new app.User({
@@ -42,14 +20,39 @@ app.UserView = Backbone.View.extend({
 			'name' : $('#name').val()
 		});
 		userList.create(u);
+		this.model.set(u.toJSON());
+	},
+
+});
+
+app.UserListView = Backbone.View.extend({
+	el : $("#user_list"),
+	initialize : function(options) {
+		this.listenTo(userList, 'add', this.addOne);
+		this.listenTo(userList, 'reset', this.addAll);
+		this.listenTo(userList, 'update', this.addAll);
+		this.listenTo(userList, 'all', this.showEvent);
 		userList.fetch();
-		$(".controls input").val("");
+		this.render();
+	},
+	events : {
+		"click .delete" : "deleteUser",
+		"click .load" : "loadUser",
+	},
+	render : function(name) {
+		this.template = _.template(templates["UserListView"]);
+		this.$el.html(this.template);
+		return this;
 	},
 	addOne : function(user) {
 		var view = new app.UserListItemView({
 			model : user
 		});
-		$('#user_list').append(view.render().el);
+		this.$el.find("tbody").append(view.render().el);
+	},
+	addAll : function() {
+		this.$el.find("tbody").html("");
+		userList.each(this.addOne, this);
 	},
 	deleteUser : function(e) {
 		e.preventDefault();
@@ -60,18 +63,21 @@ app.UserView = Backbone.View.extend({
 	},
 	loadUser : function(e) {
 		var id = $(e.currentTarget).attr("data-id");
-		this.model = userList.get(id);
-		this.render();
+		this.model.set(userList.get(id).toJSON());
+	},
+	showEvent : function(name) {
+		console.log("Event:" + name);
 	}
 });
 
 app.UserListItemView = Backbone.View.extend({
 	tagName : "tr",
 	initialize : function() {
+		this.listenTo(this.model, 'change', this.render);
 	},
 	render : function() {
 		this.template = _.template(templates["UserListItemView"]);
-		$(this.el).html(this.template(this.model.toJSON()));
+		this.$el.html(this.template(this.model.toJSON()));
 		return this;
 	}
 });

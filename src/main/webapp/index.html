@@ -10,8 +10,20 @@
 <body>
 
 	<div class="container">
-		<div class="row"></div>
-		<div class="row" id="app"></div>
+		<div class="row header"></div>
+		<div class="row main">
+			<div class="row">
+				<div class="col-md-3" id="form"></div>
+				<div class="col-md-3" id="user_list"></div>
+				<div class="row status-bar">
+					<div class="col-md-12">
+						<div class="alert alert-success" style="display: none">
+							<b>Success!</b> User saved successfully
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="row"></div>
 	</div>
 
@@ -26,6 +38,5 @@
 	<script src="js/views/appView.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/main.js"></script>
-
 </body>
 </html>
