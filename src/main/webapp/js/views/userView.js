@@ -1,6 +1,7 @@
 var app = app || {};
 
 app.UserView = Backbone.View.extend({
+	el: $("#app"),
 	initialize : function() {
 		this.listenTo(userList, 'add', this.addOne);
 		this.listenTo(userList, 'reset', this.addAll);
@@ -10,6 +11,7 @@ app.UserView = Backbone.View.extend({
 		this.render();
 	},
 	events : {
+		"change" : "change",
 		"click .save" : "createUser",
 		"click .delete" : "deleteUser",
 		"click .load" : "loadUser",
@@ -17,8 +19,15 @@ app.UserView = Backbone.View.extend({
 	render : function() {
 		this.template = _.template(templates["UserView"]);
 		this.$el.html(this.template(this.model.toJSON()));
-		this.addAll();
+		this.addAll();		
 		return this;
+	},
+	change : function(event) {		
+        var target = event.target;
+        var change = {};
+        change[target.name] = target.value;
+        console.log("Change:" + target.value);
+        //this.model.set(change);
 	},
 	destroy : function() {
 		this.model.destroy();
@@ -32,8 +41,8 @@ app.UserView = Backbone.View.extend({
 			'id' : ($('#id').val() == "") ? null : $('#id').val(),
 			'name' : $('#name').val()
 		});
-		var u2 = userList.create(u);		
-		userList.fetch();	
+		userList.create(u);
+		userList.fetch();
 		$(".controls input").val("");
 	},
 	addOne : function(user) {

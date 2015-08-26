@@ -1,36 +1,35 @@
 <div class="row">
-	<form class="form-horizontal span12">
-		<fieldset>
-			<legend>--</legend>
-			<br />
+	<div class="col-md-3">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend>--</legend>
+				<br />
 
-			<div class="row">
-				<div class="span9">
-					<div class="control-group">
-						<label for="id" class="control-label">I</label>
-						<div class="controls">
-							<input id="id" name="id" type="text"
-								value="<%= id === null ? '' : id %>" class="span1"
-								disabled="disabled" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="name" class="control-label">N</label>
-						<div class="controls">
-							<input type="text" id="name" name="name" value="<%= name %>" />
-							<span class="help-inline"></span>
-						</div>
+				<div class="control-group">
+					<label for="id" class="control-label">I</label>
+					<div class="controls">
+						<input id="id" name="id" type="text"
+							value="<%= id === null ? '' : id %>" class="span1"
+							disabled="disabled" />
 					</div>
 				</div>
+				<div class="control-group">
+					<label for="name" class="control-label">N</label>
+					<div class="controls">
+						<input type="text" id="name" name="name" value="<%= name %>" /> <span
+							class="help-inline"></span>
+					</div>
+				</div>
+
+			</fieldset>
+			<div class="form-actions">
+				<a href="#" class="btn btn-primary save">S</a>
 			</div>
-		</fieldset>
-		<div class="form-actions">
-			<a href="#" class="btn btn-primary save">S</a>
-		</div>
-	</form>
-</div>
-<div class="row">
-	<div class="span12>">
+		</form>
+	</div>
+
+	<div class="col-md-9">
+		<br> <br>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
@@ -44,8 +43,9 @@
 		</table>
 	</div>
 </div>
+
 <div class="row status-bar">
-	<div class="span12">
+	<div class="col-md-12">
 		<div class="alert alert-success" style="display: none">
 			<b>Success!</b> User saved successfully
 		</div>
