@@ -47,7 +47,8 @@ public class JSONService {
 	@Path("{id}")
 	public User update(User user) {
 		System.out.println("PUT:" + user.getId());
-		return users.put(user.getId(), user);
+		users.put(user.getId(), user);
+		return users.get(user.getId());
 	}
 
 	@DELETE
