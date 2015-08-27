@@ -4,6 +4,7 @@ app.UserView = Backbone.View.extend({
 	el : $("#form"),
 	initialize : function() {
 		this.listenTo(this.model, 'change', this.render);
+		this.listenTo(userList, 'all', this.showEvent);
 		this.render();
 	},
 	events : {
@@ -19,9 +20,20 @@ app.UserView = Backbone.View.extend({
 			'id' : ($('#id').val() == "") ? null : $('#id').val(),
 			'name' : $('#name').val()
 		});
-		userList.create(u);
-		this.model.set(u.toJSON());
+		u.save({}, {
+			success : function(u2) {
+				userList.set(u, {
+					remove : false
+				});
+				$('#id').val("");
+				$('#name').val("");
+			}
+		});
+
 	},
+	showEvent : function(name) {
+		console.log("Form Event:" + name);
+	}
 
 });
 
@@ -66,7 +78,7 @@ app.UserListView = Backbone.View.extend({
 		this.model.set(userList.get(id).toJSON());
 	},
 	showEvent : function(name) {
-		console.log("Event:" + name);
+		console.log("List Event:" + name);
 	}
 });
 
