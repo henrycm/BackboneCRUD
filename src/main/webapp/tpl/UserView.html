@@ -1,30 +1,31 @@
 
-<form class="form-horizontal">
-	<fieldset>
-		<legend>--</legend>
-		<br />
-
-		<div class="control-group">
-			<label for="id" class="control-label">I</label>
-			<div class="controls">
-				<input id="id" name="id" type="text"
-					value="<%= id === null ? '' : id %>" class="span1"
-					disabled="disabled" />
+<div class="panel panel-warning">
+	<div class="panel-heading">Insert / Edit</div>
+	<div class="panel-body">
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="id" class="col-sm-3 control-label">Id:</label>
+				<div class="col-sm-9">
+					<input id="id" name="id" type="text"
+						value="<%= id === null ? '' : id %>" class="form-control"
+						disabled="disabled" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="name" class="control-label">N</label>
-			<div class="controls">
-				<input type="text" id="name" name="name" value="<%= name %>" /> <span
-					class="help-inline"></span>
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label">Name:</label>
+				<div class="col-sm-9">
+					<input type="text" id="name" name="name" value="<%= name %>"
+						class="form-control" />
+				</div>
 			</div>
-		</div>
-
-	</fieldset>
-	<div class="form-actions">
-		<a href="#" class="btn btn-primary save">S</a>
+			<div class="form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<a href="#" class="btn btn-primary save">Save</a>
+				</div>
+			</div>
+		</form>
 	</div>
-</form>
+</div>
 
 
 
