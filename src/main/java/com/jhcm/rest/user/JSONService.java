@@ -1,6 +1,5 @@
 package com.jhcm.rest.user;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +20,13 @@ public class JSONService {
 
 	private final static Map<Integer, User> users = new HashMap<Integer, User>();
 	private static int id_seq;
+	private Page page = new Page();
 
 	@GET
-	public Collection<User> get() {
-		System.out.println("GET:");
-		return users.values();
+	public Object[] get() {
+		System.out.println("GET:" + users.size());
+		page.setTotal_entries(users.size());
+		return new Object[] { page, users.values().toArray() };
 	}
 
 	@GET

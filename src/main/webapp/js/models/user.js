@@ -10,9 +10,14 @@ app.User = Backbone.Model.extend({
 	}
 });
 
-app.UserCollection = Backbone.Collection.extend({
+app.UserCollection = Backbone.PageableCollection.extend({
 	model : app.User,
-	url : "api/users"
+	url : "api/users",
+	state : {
+		pageSize : 5,
+		sortKey : "name",
+		order : 1
+	}
 });
 
 userList = new app.UserCollection;

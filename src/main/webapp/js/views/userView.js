@@ -44,7 +44,7 @@ app.UserListView = Backbone.View.extend({
 		this.listenTo(userList, 'reset', this.addAll);
 		this.listenTo(userList, 'update', this.addAll);
 		this.listenTo(userList, 'all', this.showEvent);
-		userList.fetch();
+		userList.getFirstPage();
 		this.render();
 	},
 	events : {
@@ -54,6 +54,10 @@ app.UserListView = Backbone.View.extend({
 	render : function(name) {
 		this.template = _.template(templates["UserListView"]);
 		this.$el.html(this.template);
+		
+		this.template = _.template(templates["Pagination"]);
+		$(".panel-heading").append(this.template(userList.state.toJSON()));
+	
 		return this;
 	},
 	addOne : function(user) {
