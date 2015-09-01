@@ -1,7 +1,7 @@
-package com.jhcm.rest.user;
+package com.jhcm.rest.view;
 
 
-public class Page {
+public class PageDTO {
 	private int total_entries;
 
 	public int getTotal_entries() {
