@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jhcm.rest.backend.model.User;
 import com.jhcm.rest.backend.service.UserService;
 
-@RestController(value = "/api/users")
+@RestController
 public class UserResource {
 
 	private static final Logger log = LoggerFactory
@@ -23,7 +23,7 @@ public class UserResource {
 	@Resource
 	private UserService service;
 
-	@RequestMapping(value = "/api/users/{page}", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{page}", method = RequestMethod.GET)
 	public Object[] get(@PathVariable Integer page) {
 		Page<User> p = service.listUsers(page);
 		PageDTO dto = new PageDTO();
@@ -32,19 +32,19 @@ public class UserResource {
 		return new Object[] { dto, p.getContent() };
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public User create(@RequestBody User user) {
 		log.debug("POST:" + user.getName());
 		return service.save(user);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(value = "/users", method = RequestMethod.PUT)
 	public User update(@RequestBody User user) {
 		log.debug("PUT:" + user.getId());
 		return service.save(user);
 	}
 
-	@RequestMapping(value = "/api/users/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
 	public void remove(@PathVariable Long id) {
 		log.debug("DELETE:");
 		service.delete(id);
