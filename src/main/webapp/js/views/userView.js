@@ -50,14 +50,18 @@ app.UserListView = Backbone.View.extend({
 	events : {
 		"click .delete" : "deleteUser",
 		"click .load" : "loadUser",
+		"click .next" : "next",
+		"click .prev" : "prev",
 	},
 	render : function(name) {
 		this.template = _.template(templates["UserListView"]);
 		this.$el.html(this.template);
-		
+
 		this.template = _.template(templates["Pagination"]);
-		$(".panel-heading").append(this.template(userList.state.toJSON()));
-	
+		$(".user-list").append(this.template({
+			nmPages : 3
+		}));
+
 		return this;
 	},
 	addOne : function(user) {
@@ -83,6 +87,12 @@ app.UserListView = Backbone.View.extend({
 	},
 	showEvent : function(name) {
 		console.log("List Event:" + name);
+	},
+	next : function() {
+		userList.getNextPage();
+	},
+	prev : function() {
+		userList.getPreviousPage();
 	}
 });
 

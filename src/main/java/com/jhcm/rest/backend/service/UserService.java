@@ -24,6 +24,10 @@ public class UserService {
 		return urepo.findAll(req);
 	}
 
+	public User getUser(long id) {
+		return urepo.findOne(id);
+	}
+
 	public User save(User user) {
 		return urepo.save(user);
 	}

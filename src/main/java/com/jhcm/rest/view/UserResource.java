@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jhcm.rest.backend.model.User;
@@ -23,9 +24,9 @@ public class UserResource {
 	@Resource
 	private UserService service;
 
-	@RequestMapping(value = "/users/{page}", method = RequestMethod.GET)
-	public Object[] get(@PathVariable Integer page) {
-		Page<User> p = service.listUsers(page);
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	public Object[] get(@RequestParam("page") Integer page) {
+		Page<User> p = service.listUsers(--page);
 		PageDTO dto = new PageDTO();
 		dto.setTotal_entries(new Long(p.getTotalElements()).intValue());
 		log.debug("GET:" + page);
@@ -38,16 +39,18 @@ public class UserResource {
 		return service.save(user);
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.PUT)
-	public User update(@RequestBody User user) {
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
+	public User update(@RequestBody User user, @PathVariable Long id) {
 		log.debug("PUT:" + user.getId());
 		return service.save(user);
 	}
 
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
-	public void remove(@PathVariable Long id) {
+	public User remove(@PathVariable Long id) {
 		log.debug("DELETE:");
+		User u = service.getUser(id);
 		service.delete(id);
+		return u;
 	}
 
 }
