@@ -4,7 +4,7 @@ app.UserView = Backbone.View.extend({
 	el : $("#form"),
 	initialize : function() {
 		this.listenTo(this.model, 'change', this.render);
-		this.listenTo(userList, 'all', this.showEvent);
+		//this.listenTo(userList, 'all', this.showEvent);
 		this.render();
 	},
 	events : {
@@ -22,9 +22,7 @@ app.UserView = Backbone.View.extend({
 		});
 		u.save({}, {
 			success : function(u2) {
-				userList.set(u, {
-					remove : false
-				});
+				userList.push(u);
 				$('#id').val("");
 				$('#name').val("");
 			}
@@ -42,7 +40,7 @@ app.UserListView = Backbone.View.extend({
 	initialize : function(options) {
 		this.listenTo(userList, 'add', this.addOne);
 		this.listenTo(userList, 'reset', this.addAll);
-		this.listenTo(userList, 'update', this.addAll);
+		this.listenTo(userList, 'sync', this.addAll);
 		this.listenTo(userList, 'all', this.showEvent);
 		userList.getFirstPage();
 		this.render();
@@ -52,17 +50,19 @@ app.UserListView = Backbone.View.extend({
 		"click .load" : "loadUser",
 		"click .next" : "next",
 		"click .prev" : "prev",
+		"click .page" : "page"
 	},
 	render : function(name) {
 		this.template = _.template(templates["UserListView"]);
 		this.$el.html(this.template);
-
-		this.template = _.template(templates["Pagination"]);
-		$(".user-list").append(this.template({
-			nmPages : 3
-		}));
-
 		return this;
+	},
+	renderPag : function() {
+		var tmp_pag = _.template(templates["Pagination"]);
+		$(".user-list").html(tmp_pag({
+			totalPages : userList.state.totalPages,
+			currentPage : userList.state.currentPage
+		}));
 	},
 	addOne : function(user) {
 		var view = new app.UserListItemView({
@@ -73,6 +73,7 @@ app.UserListView = Backbone.View.extend({
 	addAll : function() {
 		this.$el.find("tbody").html("");
 		userList.each(this.addOne, this);
+		this.renderPag();
 	},
 	deleteUser : function(e) {
 		e.preventDefault();
@@ -93,6 +94,9 @@ app.UserListView = Backbone.View.extend({
 	},
 	prev : function() {
 		userList.getPreviousPage();
+	},
+	page : function(e) {
+		userList.getPage($(e.currentTarget).data("nm_page"));
 	}
 });
 
