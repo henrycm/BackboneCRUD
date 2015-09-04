@@ -4,7 +4,7 @@ app.UserView = Backbone.View.extend({
 	el : $("#form"),
 	initialize : function() {
 		this.listenTo(this.model, 'change', this.render);
-		//this.listenTo(userList, 'all', this.showEvent);
+		// this.listenTo(userList, 'all', this.showEvent);
 		this.render();
 	},
 	events : {
@@ -16,13 +16,18 @@ app.UserView = Backbone.View.extend({
 		return this;
 	},
 	createUser : function() {
+		var id = ($('#id').val() == "") ? null : $('#id').val();
 		var u = new app.User({
-			'id' : ($('#id').val() == "") ? null : $('#id').val(),
+			'id' : id,
 			'name' : $('#name').val()
 		});
 		u.save({}, {
 			success : function(u2) {
-				userList.push(u);
+				userList.set(u, {
+					remove : false
+				});
+				if (id == null)
+					userList.getLastPage();
 				$('#id').val("");
 				$('#name').val("");
 			}
@@ -40,7 +45,7 @@ app.UserListView = Backbone.View.extend({
 	initialize : function(options) {
 		this.listenTo(userList, 'add', this.addOne);
 		this.listenTo(userList, 'reset', this.addAll);
-		this.listenTo(userList, 'sync', this.addAll);
+		this.listenTo(userList, 'update', this.addAll);
 		this.listenTo(userList, 'all', this.showEvent);
 		userList.getFirstPage();
 		this.render();
