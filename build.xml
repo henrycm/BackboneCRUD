@@ -1,0 +1,60 @@
+<project name="BackboneCRUD" default="war" basedir=".">
+	
+	<property name="war.name" value="${ant.project.name}"/>
+	
+	<target name="mvn-init" unless="compile.classpath" xmlns:artifact="urn:maven-artifact-ant">
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" />
+		<condition property="maven.repo.local" value="${maven.repo.local}" else="${user.home}/.m2/repository">
+			<isset property="maven.repo.local" />
+		</condition>
+		<echo>maven.repo.local=${maven.repo.local}</echo>
+		<artifact:localRepository id="local.repository" path="${maven.repo.local}" />
+		<artifact:pom file="pom.xml" id="maven.project" />
+		<artifact:dependencies pathId="compile.classpath" filesetId="compile.fileset" useScope="compile">
+			<pom refid="maven.project" />
+			<localRepository refid="local.repository" />
+		</artifact:dependencies>
+		<artifact:dependencies pathId="test.classpath" filesetId="test.fileset" useScope="test">
+			<pom refid="maven.project" />
+			<localRepository refid="local.repository" />
+		</artifact:dependencies>
+		<artifact:dependencies pathId="runtime.classpath" filesetId="runtime.fileset" useScope="runtime">
+			<pom refid="maven.project" />
+			<localRepository refid="local.repository" />
+		</artifact:dependencies>
+	</target>
+
+	<target name="compile" depends="mvn-init">
+		<mkdir dir="target/classes" />
+		<javac srcdir="src/main/java" destdir="target/classes" classpathref="compile.classpath" />
+		<copy todir="target/classes">
+			<fileset dir="src/main/java" excludes="**/*.java" />
+		</copy>
+		<copy todir="target/classes" failonerror="false">
+			<fileset dir="src/main/resources" />
+		</copy>
+	</target>
+
+	<macrodef name="war-exploded">
+		<attribute name="deployDir" default="target/${war.name}" />
+		<sequential>
+			<copy todir="@{deployDir}">
+				<fileset dir="src/main/webapp" />
+			</copy>
+			<copy todir="@{deployDir}/WEB-INF/classes">
+				<fileset dir="target/classes" />
+			</copy>
+			<copy todir="@{deployDir}/WEB-INF/lib" flatten="true">
+				<fileset refid="runtime.fileset" />
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<target name="war-exploded" depends="compile">
+		<war-exploded />
+	</target>
+
+	<target name="war" depends="war-exploded">
+		<zip destfile="target/${war.name}.war" basedir="target/${war.name}" />
+	</target>
+</project>
